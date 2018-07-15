@@ -153,7 +153,7 @@ d3.select(".chart")
         })
         .attr('fill',);
 
-d3.csv("./test.csv", function(d) {
+d3.csv("./athlete_events.csv", function(d) {
   return {
     year: new Date(+d.Year, 0, 1), // convert "Year" column to Date
     make: d.Make,
