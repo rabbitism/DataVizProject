@@ -4,6 +4,11 @@ a, address, b, big, blockquote, body, center, cite, code, dd, del, div, dl, dt, 
     font-family: 'Segoe UI Light', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html, body{
+    margin: 0;
+    height: 98%;
+}
+
 a{
     color: black;
     text-decoration: none;
@@ -18,15 +23,15 @@ ul{
     height: 100%;
     border: 1px solid #ddd;
     box-shadow: 0 0 2px #ddd;
-    margin: 10px 0 0 10px;
     overflow: hidden;
 }
 
 #header-title{
     font-weight: bold;
     float: left; 
+    font-size: 100;
     vertical-align: middle; 
-    line-height: 33px;
+    line-height: 60px;
     margin: 0 20px;
     font-size: 20px;
     
@@ -34,7 +39,7 @@ ul{
 
 #tab-header{
     background-color: #F7F7F7;
-    height: 33px;
+    height: 60px;
     text-align: center;
     position: relative;
 }
@@ -48,8 +53,8 @@ ul{
 #tab-header ul li{
     float: left;
     width: 150px;
-    height: 33px;
-    line-height: 33px;
+    height: 60px;
+    line-height: 60px;
     padding: 0 1px;
     border-bottom: 1px solid #dddddd;
 }
@@ -69,6 +74,7 @@ ul{
 
 #tab-content .dom{
     display: none;
+    height: 100%;
 }
 
 #tab-content .dom ul li{
