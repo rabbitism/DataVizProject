@@ -1,51 +1,52 @@
 <!DOCTYPE html>
 <html>
-
     <meta charset="utf-8">
     <title>CS 498 Data Visualization Final Project</title>
     <a href="http://www.w3school.com.cn/html/html_styles.asp"></a>
     <link rel="stylesheet" type="text/css" href="./styles/index.css">
+    <link rel="stylesheet" type="text/css" href="./styles/switch.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="scripts/index.js"></script>
 
-
 <body style="background-color: #ffffff">
-  
-  <div id="tab">
+    <div id="tab">
       
-      <!--Tab Header-->
-      <div id="tab-header">
-          <ul style="float: left">
-              <object data="pictures/Olympic_Rings.svg" style="padding: 2px; height: 50px; margin: 5px; float: left; z-index: 10;" ></object>
-              <p id="header-title" >Olympic Games in 120 Years</p>
-              <li class="selected">Home</li>
-              <li>Population</li>
-              <li>Events</li>
-              <li>Score Board</li>
-              <li>Acknowledgements</li>
-          </ul>
-      </div>
-      <!--主要内容-->
-      <div id="tab-content" style="min-height: 700px;">
-          <div class="dom" style="display: block;">
-            Hello
-          </div>
-          <div class="dom" id="population">
-          </div>
-          <div class="dom" id="events">
-          </div>
-          <div class="dom" id="socreboard">
-          </div>
-          <div class="dom" id="acknowledgements">
-          </div>
-      </div>
-  </div>
-  <footer>
-    Hello
-  </footer>
+        <!--Tab Header-->
+        <div id="tab-header">
+            <ul style="float: left">
+                <object data="pictures/Olympic_Rings.svg" style="padding: 2px; height: 50px; margin: 5px; float: left; z-index: 10;" ></object>
+                <p id="header-title" >Olympic Games in 120 Years</p>
+                <li class="selected">Home</li>
+                <li>Population</li>
+                <li>Events</li>
+                <li>Score Board</li>
+                <li>Acknowledgements</li>
+            </ul>
+        </div>
+        <!--Main Content-->
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+            <label class="onoffswitch-label" for="myonoffswitch">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+        <div id="tab-content" style="min-height: 700px;">
+            <div class="dom" style="display: block;">
+            
+            </div>
+            <div class="dom" id="population">
+            </div>
+            <div class="dom" id="events">
+            </div>
+            <div class="dom" id="socreboard">
+            </div>
+            <div class="dom" id="acknowledgements">
+            </div>
+        </div>
+    </div>
+    <footer>
+        Powered by Bin Dong
+    </footer>
 </body>
-
-
-
-
 </html>
