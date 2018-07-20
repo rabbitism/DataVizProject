@@ -6,21 +6,21 @@ function draw(geo_data) {
   
     var svg = d3.select("#content").select("svg")
         .attr("width", width + margin)
-        .attr("height", height + margin);
+        .attr("height", height + 100 + margin);
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // DRAW GLOBE
 // Based on: http://bl.ocks.org/PatrickStotz/1f19b3e4cb848100ffd7
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-    var earthcolor = d3.rgb("rgb(107,147,214)");
+    var earthcolor = d3.rgb("rgb(255,255,255)");
     var countryfillcolor = d3.rgb("rgb(107,147,214)"); 
     var countrystrokecolor = d3.rgb("rgb(255,255,255)"); 
 
     var projection = d3.geo.orthographic()
                     .scale(300)
                     .translate([width / 2, height / 2])
-                    .clipAngle(180) 
+                    .clipAngle(90) 
                   //.precision(0.2); 
   
     var pathproj = d3.geo.path().projection(projection);
@@ -45,6 +45,13 @@ function draw(geo_data) {
              .style('stroke-width', .5)
              .style('opacity',.8);
 
+             svg.append("text")
+             .attr("x", (width / 2))             
+             .attr("y", height+30)
+             .attr("text-anchor", "middle")  
+             .style("font-size", "16px") 
+             .text("Host cities in history (1986-2018)");
+
         /////////////////////////////////////////////////////////////////////////////////
         //draw, spin, and highlight the cities on the world
         function plot_points(data) {  
@@ -65,7 +72,7 @@ function draw(geo_data) {
                 .attr("d", pathproj);
 
             // Control the radius of ALL circles!
-            pathproj.pointRadius(function(d,i) { 
+            pathproj.pointRadius(function(d,i) {
                 if (d.type =="Point") {
                     return 4;
                 }
@@ -89,7 +96,7 @@ function draw(geo_data) {
                           svg.selectAll("path.city").attr("d", pathproj);
                            }); // end timer spinning globe
             }; // end spinning globe
-            spinning_globe();
+        spinning_globe();
         }; // end plot_points function
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // loading igem data 

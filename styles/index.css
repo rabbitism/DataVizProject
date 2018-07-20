@@ -8,6 +8,7 @@ html{
     margin: 0;
     height: 100%;
     width: 100%;
+    
 }
 
 body{
@@ -15,6 +16,7 @@ body{
     height: 95%;
     width: 99%;
     min-width: 1200px;
+    min-height: 800px;
 }
 
 a{
@@ -92,4 +94,8 @@ ul{
 
 #tab-content .dom ul li a:hover{
     color: orange;
+}
+
+.page-title{
+    font-size: 60px;
 }
