@@ -5,12 +5,12 @@
     <a href="http://www.w3school.com.cn/html/html_styles.asp"></a>
     <link rel="stylesheet" type="text/css" href="./styles/index.css">
     <link rel="stylesheet" type="text/css" href="./styles/switch.css">
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="scripts/index.js"></script>
+    <script src="scripts/globe.js"></script>
 
 <body style="background-color: #ffffff">
     <div id="tab">
-      
         <!--Tab Header-->
         <div id="tab-header">
             <ul style="float: left">
@@ -20,7 +20,7 @@
                 <li>Population</li>
                 <li>Events</li>
                 <li>Score Board</li>
-                <li>Acknowledgements</li>
+                <li style="width: 150px;;">Acknowledgements</li>
             </ul>
         </div>
         <!--Main Content-->
@@ -32,8 +32,9 @@
             </label>
         </div>
         <div id="tab-content" style="min-height: 700px;">
-            <div class="dom" style="display: block;">
-            
+            <div class="dom" id="content" style="display: block;">
+                <p>hello</p>
+                <svg></svg>
             </div>
             <div class="dom" id="population">
             </div>
@@ -48,5 +49,11 @@
     <footer>
         Powered by Bin Dong
     </footer>
+
+    <script>
+        d3.json("data/world_countries.json", function(error, geo_data) {
+              draw(geo_data)
+              });
+    </script>
 </body>
 </html>
