@@ -99,3 +99,7 @@ ul{
 .page-title{
     font-size: 60px;
 }
+
+.axis .domain {
+    display: none;
+  }

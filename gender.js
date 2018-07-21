@@ -1,9 +1,9 @@
 function drawPopulation(error,data){
-    var svg = d3.select("#population").select("svg"),
-    margin = {top: 20, right: 20, bottom: 80, left: 80},
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var svg = d3.select("#population").select("svg");
+    var margin = {top: 20, right: 20, bottom: 80, left: 80};
+    var width = +svg.attr("width") - margin.left - margin.right;
+    var height = +svg.attr("height") - margin.top - margin.bottom;
+    var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var x = d3.scaleLinear()
     .rangeRound([0, width]);
