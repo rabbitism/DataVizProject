@@ -17,7 +17,7 @@
 </body>
 
 <script src="https://d3js.org/d3.v4.js"></script>
-<script src="gender.js"></script>
+<script src="scripts/gender.js"></script>
 <script>
     d3.csv("gender.csv", function(d, i, columns) {
   for (i = 1, t = 0; i < columns.length-1; ++i) t += d[columns[i]] = +d[columns[i]];

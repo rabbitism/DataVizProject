@@ -1,6 +1,7 @@
 function drawPopulation(error,data){
-    var svg = d3.select("#population").select("svg");
-    var margin = {top: 20, right: 20, bottom: 80, left: 80};
+    console.log("Hello");
+    var svg = d3.selectAll("#population").select("svg").attr("width",900).attr("height",600);
+    var margin = {top: 80, right: 80, bottom: 80, left: 80};
     var width = +svg.attr("width") - margin.left - margin.right;
     var height = +svg.attr("height") - margin.top - margin.bottom;
     var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -86,6 +87,12 @@ var z = d3.scaleOrdinal()
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
       .text("Summer Athletes");
+    g.append("text")
+      .attr("x", (width / 2))             
+      .attr("y", 0)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "16px") 
+      .text("Athletes in Olympics");
 
   var legend = g.append("g")
       .attr("font-family", "sans-serif")
@@ -94,7 +101,7 @@ var z = d3.scaleOrdinal()
     .selectAll("g")
     .data(keys.slice().reverse())
     .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(20," + i * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(-500," + i * 20 + ")"; });
 
   legend.append("rect")
       .attr("x", width - 19)

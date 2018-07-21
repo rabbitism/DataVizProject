@@ -1,6 +1,6 @@
-var margin = 0,
-    width = 800 - margin,
-    height = 600 - margin;
+var margin = 80,
+    width = 700,
+    height = 600 + margin;
 
 function draw(geo_data) {
   
