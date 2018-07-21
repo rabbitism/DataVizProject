@@ -1,4 +1,5 @@
-var svg = d3.select("#population").select("svg"),
+function drawPopulation(error,data){
+    var svg = d3.select("#population").select("svg"),
     margin = {top: 20, right: 20, bottom: 80, left: 80},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
@@ -16,12 +17,6 @@ var y1 = d3.scaleLinear()
 var z = d3.scaleOrdinal()
     .range(["#3d84a8", "#ff2e63"]);
 
-d3.csv("gender.csv", function(d, i, columns) {
-  for (i = 1, t = 0; i < columns.length-1; ++i) t += d[columns[i]] = +d[columns[i]];
-  d.total = t;
-  //console.log(t);
-  return d;
-}, function(error, data) {
     console.log(data);
   if (error) throw error;
 
@@ -112,4 +107,4 @@ d3.csv("gender.csv", function(d, i, columns) {
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });
-});
+}
