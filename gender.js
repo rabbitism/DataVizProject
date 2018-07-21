@@ -1,5 +1,3 @@
-var block = d3.select('#population');
-
 var svg = d3.select("#population").select("svg"),
     margin = {top: 20, right: 20, bottom: 80, left: 80},
     width = +svg.attr("width") - margin.left - margin.right,
@@ -13,24 +11,35 @@ var y = d3.scaleLinear()
     .rangeRound([height-100, 0]);
 
 var y1 = d3.scaleLinear()
-    .rangeRound([height,height-80]);
+    .rangeRound([height-85,height]);
 
 var z = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .range(["#3d84a8", "#ff2e63"]);
 
-d3.csv("data.csv", function(d, i, columns) {
-  for (i = 2, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
+d3.csv("gender.csv", function(d, i, columns) {
+  for (i = 1, t = 0; i < columns.length-1; ++i) t += d[columns[i]] = +d[columns[i]];
   d.total = t;
-  console.log(t);
+  //console.log(t);
   return d;
 }, function(error, data) {
+    console.log(data);
   if (error) throw error;
 
-  var keys = data.columns.slice(2);
+  var keys = data.columns.slice(2,4);
+
+  var tooltip = d3.select("#population")
+  .append("div")
+  .style("position", "absolute")
+  .style("z-index", "10")
+  .style("visibility", "hidden")
+  .style("background", "#a8d8ea")
+  .style("padding","4px")
+  .style("font-family","Segoe UI")
+  .style("font-size","12px");
 
   x.domain([1896,2020]);
   y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
-  y1.domain([200,0]).nice();
+  y1.domain([0,3000]);
   z.domain(keys);
 
   g.append("g")
@@ -42,18 +51,34 @@ d3.csv("data.csv", function(d, i, columns) {
     .data(function(d) { return d; })
     .enter().append("rect")
       .attr("x", function(d) { return x(d.data.Year); })
-      .attr("y", function(d) { return y(d[1]); })
-      .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-      .attr("width", 12);
+      .attr("y", function(d) { return d.data.Season==1?y(d[1]):y1(d[0]); })
+      .attr("height", function(d) { return d.data.Season==1? y(d[0])-y(d[1]):y1(d[1])-y1(d[0]); })
+      .attr("width", 12)
+      .on("mouseover", function(d){
+
+          return tooltip.style("visibility", "visible")
+          .html(d.data.Year+" "+d.data.City+ (d.data.Season==1?" Summer":" Winter")+" Olympic Games"
+            +"<br/>Male Athletes: "+d.data.Men+"<br/>Female Athletes: "+d.data.Women)
+          ;})
+	  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+	  .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 
   g.append("g")
       .attr("class", "axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + (height-105) + ")")
       .call(d3.axisBottom(x));
 
   g.append("g")
     .attr("class","axis")
-    .call(d3.axisLeft(y1).ticks(null,"s"))
+    .call(d3.axisLeft(y1).ticks(3,"s"))
+    .append("text")
+    .attr("x", 2)
+      .attr("y", y1(y1.ticks().pop()) - 0.5)
+      .attr("dy", "0.32em")
+      .attr("fill", "#000000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "start")
+      .text("Winter Athletes");
 
   g.append("g")
       .attr("class", "axis")
@@ -62,10 +87,10 @@ d3.csv("data.csv", function(d, i, columns) {
       .attr("x", 2)
       .attr("y", y(y.ticks().pop()) + 0.5)
       .attr("dy", "0.32em")
-      .attr("fill", "#000")
+      .attr("fill", "#000000")
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
-      .text("Population");
+      .text("Summer Athletes");
 
   var legend = g.append("g")
       .attr("font-family", "sans-serif")
@@ -74,7 +99,7 @@ d3.csv("data.csv", function(d, i, columns) {
     .selectAll("g")
     .data(keys.slice().reverse())
     .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(20," + i * 20 + ")"; });
 
   legend.append("rect")
       .attr("x", width - 19)

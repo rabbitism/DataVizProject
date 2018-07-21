@@ -7,8 +7,10 @@
     <link rel="stylesheet" type="text/css" href="./styles/switch.css">
     <link rel="stylesheet" type="text/css" href="./styles/data-viz.css">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="d3.v4.js"></script>
     <script src="scripts/index.js"></script>
     <script src="scripts/globe.js"></script>
+    <script src="gender.js"></script>
 
 <body style="background-color: #ffffff">
     <div id="tab">
@@ -27,7 +29,6 @@
         <!--Main Content-->
 
         <div id="tab-content" style="min-height: 700px;">
-
             <div class="dom" style="display: block;">
                 <div class="onoffswitch">
                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
@@ -43,14 +44,12 @@
                     <p class="page-title">Olympics in a Nutshell</p>
                 </div>
             </div>
-            <div class="dom" id="population">
-                
-                <div class="onoffswitch">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-                    <label class="onoffswitch-label" for="myonoffswitch">
-                        <span class="onoffswitch-inner"></span>
-                        <span class="onoffswitch-switch"></span>
-                    </label>
+            <div class="dom" style="display: block;">
+                <div id="population" style="float: left;">
+                    <svg width="960" height="500"></svg>
+                </div>
+                <div style="float: left;">
+                    <p class="page-title">Olympics in a Nutshell</p>
                 </div>
             </div>
             <div class="dom" id="events">
@@ -69,6 +68,7 @@
         d3.json("data/world_countries.json", function(error, geo_data) {
               draw(geo_data)
               });
+        
     </script>
 </body>
 </html>
