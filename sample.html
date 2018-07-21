@@ -1,203 +1,100 @@
+
 <!DOCTYPE html>
-<html>
-<head>
-         <!-- Declare the character set of the document -->
-        <meta charset="UTF-8">
-         <!-- Support IE9-IE10 -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <!-- Set the viewport -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <!-- Javascripts -->
-        <script src="http://d3js.org/d3.v3.min.js"></script>
-    
-    <style>
-        body {
-                overflow:visible;
-                background: #454545;
-                position: relative;
-                }
-        
-        svg {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
+<style>
 
-        .city {
-                fill: rgb(79,76,176);
-                stroke: rgb(79,76,176);
-                stroke-width: 0.4;
-            }
-    </style>
-    
-    <script type="text/javascript">  
-        var margin = 0,
-            width = 800 - margin,
-            height = 600 - margin;
-    
-    function draw(geo_data) {
-          
-        var svg = d3.select("body").select("#content").select("svg")
-            .attr("width", width + margin)
-            .attr("height", height + margin);
-        
-        
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        // DRAW GLOBE
-        // Based on: http://bl.ocks.org/PatrickStotz/1f19b3e4cb848100ffd7
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        
-       var earthcolor = d3.rgb("rgb(107,147,214)");
-       var countryfillcolor = d3.rgb("rgb(107,147,214)"); 
-       var countrystrokecolor = d3.rgb("rgb(255,255,255)"); 
+.axis .domain {
+  display: none;
+}
 
-          var projection = d3.geo.orthographic()
-                            .scale(300)
-                            .translate([width / 2, height / 2])
-                            .clipAngle(180) 
-                          //.precision(0.2); 
-          
-         var pathproj = d3.geo.path().projection(projection);
+</style>
+<svg width="960" height="500"></svg>
+<script src="d3.v4.js"></script>
+<script>
 
-        // drawing a sphere as landmass
-        var g = svg.append("g");
-            g.append("path")
-               .datum({type: "Sphere"})
-               .attr("class", "sphere")
-               .attr("d", pathproj)
-               .attr("fill", earthcolor);
+var svg = d3.select("svg"),
+    margin = {top: 20, right: 20, bottom: 20, left: 20},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // drawing the worldmap
-        var map = svg.append('g').selectAll('path')
-                     .attr("class", "fill")
-                     .data(geo_data.features)
-                     .enter()
-                     .append('path')
-                     .attr('d', pathproj)
-                     .style('fill', countryfillcolor) //country fill
-                     .style('stroke', countrystrokecolor)
-                     .style('stroke-width', .5)
-                     .style('opacity',.8);
-        
-                /////////////////////////////////////////////////////////////////////////////////
-                //draw, spin, and highlight the cities on the world
-                function plot_points(data) {  
-        
-                    // Add city points to map!
-                    // JSON object (instead of circles) for points allowed to be clipped at "backside" of earth:
-                    svg.append('g')
-                    .selectAll("path")
-                        .data(data,function(d,i){ return d.id })    
-                        .enter()
-                        .append("path")
-                        .datum(function(d) {
-                                return {
-                                    type: "Point",
-                                    coordinates: [d.lon, d.lat],
-                                    class: "nohighlight" //My attempt at changing style through class..... not working....
-                                }; })
-                        .attr("class","city") //this class is assigned to the "correct" paths. Can I access them individually??
-                        .attr("d", pathproj);
+var x = d3.scaleBand()
+    .rangeRound([0, width])
+    .paddingInner(0.1)
+    .align(0.1);
 
-                // Control the radius of ALL circles!
-                pathproj.pointRadius(function(d,i) { 
-                    if (d.type =="Point") {
-                        return d.class==="nohighlight" ? 4 : 20;
-                    }
-                });
-      
-               
-                ////////////////////////////////////////////////////////////////////////////////////////////////////                         
-                //        Spinning the globe:
-                ////////////////////////////////////////////////////////////////////////////////////////////////////                         
+var y = d3.scaleLinear()
+    .rangeRound([height, 0]);
 
-                function spinning_globe(){
+var z = d3.scaleOrdinal()
+    .range(["#03A9F4", "#f44336"]);
 
-                        var time = Date.now();
-                        var rotate = [0, 0];
-                        var velocity = [.015, -0];
+d3.csv("data.csv", function(d, i, columns) {
+  for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
+  d.total = t;
+  return d;
+}, 
+function(error, data) {
+  if (error) throw error;
 
+  var keys = data.columns.slice(1);
+  console.log(data);
 
-                        d3.timer(t => {
+  x.domain(data.map(function(d) { return d.Year; }));
+  y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
+  z.domain(keys);
 
-                            // get current time
-                            var dt = Date.now() - time;
-                                  //Define new projection over a rotating path
-                                  projection.rotate([rotate[0] + velocity[0] * dt, rotate[1] + velocity[1] * dt]);
+  g.append("g")
+    .selectAll("g")
+    .data(d3.stack().keys(keys)(data))
+    .enter().append("g")
+      .attr("fill", function(d) { return z(d.key); })
+    .selectAll("rect")
+    .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("x", function(d) { return x(d.data.Year); })
+      .attr("y", function(d) { return y(d[1]); })
+      .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+      .attr("width", x.bandwidth());
 
-                                  //Add new projection to the map
-                                  map.attr('d', pathproj)
+  g.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
 
-                                  // Spin city locations: Method with JSON path element - only requires this line:
-                                  svg.selectAll("path.city").attr("d", pathproj);
+  g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(null, "s"))
+    .append("text")
+      .attr("x", 2)
+      .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("dy", "0.32em")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "start")
+      .text("Population");
 
-                                   }); // end timer spinning globe
+  var legend = g.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end")
+    .selectAll("g")
+    .data(keys.slice().reverse())
+    .enter().append("g")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-                    }; // end spinning globe
+  legend.append("rect")
+      .attr("x", width - 19)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", z);
 
-                    spinning_globe();
-                ////////////////////////////////////////////////////////////////////////////////////////////////////
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9.5)
+      .attr("dy", "0.32em")
+      .text(function(d) { return d; });
+}
 
-            
-            
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////                         
-                    ////        HIGHLIGHTING the cities one by one:
-                      var city_idx = 0; //data.id starts at 1        
-  
-                      //Every 300 msec: highlight a new city:
-                      var city_play = setInterval(function() {
-                        
-                          city_idx++;
-                        
-                          var filtered = data.filter(function(d) {
-                                              return d.id === city_idx;
-                                            });  
+);
 
-                          // CHANGE CLASS? 
-                          // CHANGE RADIUS?
-                          
-                          
-                          
-                      //Stop when all cities are highlighted
-                                if(city_idx>=geo_data.length){
-                                                clearInterval(city_play) //terminates calls to update function within setInterval function.
-                                        };
-                      }, 300); // end timer city play setInterval
-
-
-                
-                
-                }; // end plot_points function
-        
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // loading igem data 
-      d3.csv("data/gps.csv", function(d) {
-          d['id'] = +d['id'];
-          d['lat'] = +d['lat'];
-          d['lon'] = +d['lon'];
-          return d;
-        }, plot_points);
-          
-    }; // end of draw function
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-      </script>
-  </head>
-    
-    
-<body style="background-color: white">
-    <div id="content">
-        <svg></svg>
-    </div>
-    
-  <script type="text/javascript">
-      d3.json("data/world_countries.json", function(error, geo_data) {
-            draw(geo_data)
-            });
-  </script>
-    
-</body>
-</html>
+</script>
