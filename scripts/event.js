@@ -1,56 +1,30 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-
-.axis--x path {
-  display: none;
-}
-
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
-
-</style>
-<svg width="900" height="500"></svg>
-<script src="https://d3js.org/d3.v4.js"></script>
-<script>
-
-var svg = d3.select("svg"),
-    margin = {top: 20, right: 80, bottom: 30, left: 50},
+function drawEvents(data){
+    console.log("Event");
+    var svg = d3.selectAll("#events").select("svg").attr("width",900).attr("height",600);
+    var     margin = {top: 80, right: 80, bottom: 80, left: 80},
     width = svg.attr("width") - margin.left - margin.right,
-    height = svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    height = svg.attr("height") - margin.top - margin.bottom;
+    var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var parseTime = d3.timeParse("%Y%m%d");
-
-var x = d3.scaleLinear().range([0, width]),
+    var x = d3.scaleLinear().range([0, width]),
     y = d3.scaleLinear().range([height, 0]),
     z = d3.scaleOrdinal(d3.schemeCategory10);
 
-var line = d3.line()
+    var line = d3.line()
     .curve(d3.curveLinear)
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.temperature); });
 
-d3.csv("data/events.csv", type, function(error, data) {
-  if (error) throw error;
-  
-  console.log(data);
+    var cities = data.columns.slice(2).map(function(id) {
+        return {
+          id: id,
+          values: data.map(function(d) {
+            return {date: d.date, temperature: d[id]};
+          })
+        };
+      });
 
-  var cities = data.columns.slice(2).map(function(id) {
-    return {
-      id: id,
-      values: data.map(function(d) {
-        return {date: d.date, temperature: d[id]};
-      })
-    };
-  });
-
-  console.log(cities);
-
-  x.domain([1896,2020]);
+      x.domain([1896,2020]);
 
   y.domain([
     d3.min(cities, function(c) { return d3.min(c.values, function(d) { return d.temperature; }); }),
@@ -66,13 +40,14 @@ d3.csv("data/events.csv", type, function(error, data) {
 
   g.append("g")
       .attr("class", "axis axis--y")
-      .call(d3.axisLeft(y))
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("fill", "#000")
-      .text("Temperature, ºF");
+      .call(d3.axisLeft(y));
+
+  g.append("text")
+      .attr("x", (width / 2))             
+      .attr("y", 0)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "16px") 
+      .text("Count of Events and Nations Every Year");
 
   var city = g.selectAll(".city")
     .data(cities)
@@ -93,13 +68,12 @@ d3.csv("data/events.csv", type, function(error, data) {
       .attr("dy", "0.35em")
       .style("font", "10px sans-serif")
       .text(function(d) { return d.id; });
-});
 
-function type(d, _, columns) {
-  d.date = d.Year;
-  d.Season = d.Season;
-  for (var i = 2, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
-  return d;
 }
 
-</script>
+function type(d, _, columns) {
+    d.date = d.Year;
+    d.Season = d.Season;
+    for (var i = 2, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+    return d;
+  }

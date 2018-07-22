@@ -11,6 +11,7 @@
     <script src="scripts/index.js"></script>
     <script src="scripts/globe.js"></script>
     <script src="scripts/gender.js"></script>
+    <script src="scripts/event.js"></script>
 
 <body style="background-color: #ffffff">
     <div id="tab">
@@ -29,7 +30,6 @@
         <!--Main Content-->
 
         <div id="tab-content" style="min-height: 700px;">
-
             <div class="dom" style="display: block;">
                 <div id="content" style="float: left;">
                     <svg></svg>
@@ -47,7 +47,13 @@
                     <p class="page-title">Olympics in a Nutshell</p>
                 </div>
             </div>
-            <div class="dom" id="events">
+            <div class="dom">
+                <div id="events" style="float: left;">
+                    <svg></svg>
+                </div>
+                <div style="float: left;">
+                    <p class="page-title">Olympics in a Nutshell2</p>
+                </div>
             </div>
             <div class="dom" id="socreboard">
             </div>
@@ -64,14 +70,17 @@
             draw(geo_data)
         });
         d3.csv("data/gender.csv", function(d, i, columns) {
-        for (i = 1, t = 0; i < columns.length-1; ++i) t += d[columns[i]] = +d[columns[i]];
-            d.total = t;    
-            return d;
-        },
-        function(error, data) {
-            drawPopulation(error, data);   
-        }
+            for (i = 1, t = 0; i < columns.length-1; ++i) t += d[columns[i]] = +d[columns[i]];
+                d.total = t;    
+                return d;
+            },
+            function(error, data) {
+                drawPopulation(error, data);   
+            }
         );
+        d3.csv("data/events.csv", type, function(error, data) {
+            drawEvents(data);
+        });
     </script>
 </body>
 </html>

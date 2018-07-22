@@ -3,3 +3,13 @@
     stroke: rgb(79,76,176);
     stroke-width: 0.4;
 }
+
+.axis--x path {
+    display: none;
+  }
+  
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}

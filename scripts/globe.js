@@ -69,7 +69,8 @@ function draw(geo_data) {
                             coordinates: [d.lon, d.lat]
                         }; })
                 .attr("class","city") //this class is assigned to the "correct" paths. Can I access them individually??
-                .attr("d", pathproj);
+                .attr("d", pathproj)
+                ;
 
             // Control the radius of ALL circles!
             pathproj.pointRadius(function(d,i) {
