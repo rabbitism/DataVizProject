@@ -51,7 +51,6 @@ var z = d3.scaleOrdinal()
       .attr("height", function(d) { return d.data.Season==1? y(d[0])-y(d[1]):y1(d[1])-y1(d[0]); })
       .attr("width", 12)
       .on("mouseover", function(d){
-
           return tooltip.style("visibility", "visible")
           .html(d.data.Year+" "+d.data.City+ (d.data.Season==1?" Summer":" Winter")+" Olympic Games"
             +"<br/>Male Athletes: "+d.data.Men+"<br/>Female Athletes: "+d.data.Women)
