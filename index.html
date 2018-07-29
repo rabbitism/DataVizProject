@@ -23,7 +23,7 @@
                 <li class="selected">Home</li>
                 <li>Athletes</li>
                 <li>Events</li>
-                <li style="width: 150px;;">Acknowledgements</li>
+                <li style="width: 150px;;">About</li>
             </ul>
         </div>
         <!--Main Content-->
@@ -62,14 +62,26 @@
                     <p style="width: 400px; margin-top: 40px;">In the history of Olympics, different events in different sports keeps added or eliminated from the Game. In 1896 there are 14 nations competed in 43 events. And in latest Summer Game in Rio de Janeiro, atheltes from over 206 nations competed in 324 events. In latest Winter Game in Pyeongchang, there are 92 countries competed in 102 events.</p>
                 </div>
             </div>
-            <div class="dom" id="acknowledgements">
-                <a href="https://github.com/rabbitism/DataVizProject">Git Repo</a>
+            <div class="dom" id="acknowledgements" style="margin: 20px;">
+                <h1>About this Visualization</h1>
+                <h2>Hydrid Structure</h2>
+                <p>This visualization uses the interactive slideshow structure. At the top of the page, you can navigate throug different tabs for different topics.</p>
+                <h2>Scenes</h2>
+                <p>There are three pages. First is an overview of all cities hosted Olymics Games. Second is a bar chart showing athletes in each year. Third is a line chart showing change of countries participating Olymics and events envolved in Olymics.</p>
+                <h2>User Interface Events</h2>
+                <p>In homepage, the globe rotate automatically to show cities in different areas.</p>
+                <p>In bar chart, user can hover over bars to see detailed information of particular year's Olymic Games.</p>
+                <h2>Annotations</h2>
+                <p>Tooltips are used to annotate in bar chart.</p>
+                <h2>Parameters</h2>
+                <p>Home page has no parameters</p>
+                <p>Atheletes page uses count of atheletes in different gender as parameter. Events page uses count of country and event as parameter.</p>
+                <h2>Triggers</h2>
+                <p>Tooltips is triggered on mouse over event in bar chart.</p>
+                <p>User clicking different tabs can navigate to different pages. </p>
             </div>
         </div>
     </div>
-    <footer>
-        Powered by Bin Dong
-    </footer>
 
     <script>
         d3.json("data/world_countries.json", function(error, geo_data) {
