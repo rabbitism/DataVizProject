@@ -86,6 +86,7 @@ var z = d3.scaleOrdinal()
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
       .text("Summer Athletes");
+      
     g.append("text")
       .attr("x", (width / 2))             
       .attr("y", 0)
